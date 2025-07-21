@@ -1,37 +1,58 @@
 
-import { useState } from 'react';
+import {  useEffect, useState } from 'react';
 import './App.css';
-import Card from './Component/Card';
+
 import axios from "axios";
+import Card from './Component/Card';
 
 
 function App() {
 
   const[search,setSearch] = useState("");
-  
+
+  const[weather,setWeather] = useState(null);
+
 
   function changeHandler(event){
         setSearch(event.target.value);
   }
-  
-async function submitHandler(event){
+
+
+    async function submitHandler(event){
      event.preventDefault();
+
+    setWeather(search);
+
+}
+
+useEffect(()=>{
+
+  async function fetchWeather(){
+
+  
+   let api_key ="acef853debb7464a942122236250606";
+
+     let url = `https://api.weatherapi.com/v1/current.json?key=${api_key}&q=${search}`;
 
      try{
        
-      const response = await axios.post(url,{
-        search:search
-      });
+      const response = await axios.get(url);
 
       const result = response.data;
 
-      console.log(result);
+      setWeather(result);
 
      }catch(error){
        console.log(error);
      }
 
-}
+    }
+
+
+    fetchWeather();
+},[search])
+  
+
 
 
   return (
@@ -42,7 +63,7 @@ async function submitHandler(event){
             <button>Search</button>
         </form>
 
-        <Card search={search}/>
+       <Card weather={weather}/>
     </div>
   );
 }
