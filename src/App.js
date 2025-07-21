@@ -1,23 +1,48 @@
-import logo from './logo.svg';
+
+import { useState } from 'react';
 import './App.css';
+import Card from './Component/Card';
+import axios from "axios";
+
 
 function App() {
+
+  const[search,setSearch] = useState("");
+  
+
+  function changeHandler(event){
+        setSearch(event.target.value);
+  }
+  
+async function submitHandler(event){
+     event.preventDefault();
+
+     try{
+       
+      const response = await axios.post(url,{
+        search:search
+      });
+
+      const result = response.data;
+
+      console.log(result);
+
+     }catch(error){
+       console.log(error);
+     }
+
+}
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <form  onSubmit={submitHandler}>
+            
+            <input type='text' placeholder='search weather' onChange={changeHandler} value={search}></input>
+            <button>Search</button>
+        </form>
+
+        <Card search={search}/>
     </div>
   );
 }
