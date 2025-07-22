@@ -1,9 +1,9 @@
 
-import {  useEffect, useState } from 'react';
+import {   useState } from 'react';
 import './App.css';
 
-import axios from "axios";
-import Card from './Component/Card';
+ import axios from "axios";
+ import Card from './Component/Card';
 
 
 function App() {
@@ -20,14 +20,8 @@ function App() {
 
     async function submitHandler(event){
      event.preventDefault();
-
-    setWeather(search);
-
-}
-
-useEffect(()=>{
-
-  async function fetchWeather(){
+     
+       
 
   
    let api_key ="acef853debb7464a942122236250606";
@@ -40,30 +34,34 @@ useEffect(()=>{
 
       const result = response.data;
 
-      setWeather(result);
+     setWeather(result);
 
      }catch(error){
        console.log(error);
      }
 
-    }
+    
+
+}
 
 
-    fetchWeather();
-},[search])
   
 
 
 
   return (
     <div className="App">
-    <form  onSubmit={submitHandler}>
+    <form  onSubmit={submitHandler} className='form'>
             
-            <input type='text' placeholder='search weather' onChange={changeHandler} value={search}></input>
-            <button>Search</button>
+            <input type='text' placeholder='search weather' onChange={changeHandler} value={search} className='input-box'></input>
+            <button className='search-button'>Search</button>
         </form>
 
-       <Card weather={weather}/>
+       {weather === null ? (
+        <p className='shownothing'>Please search a location...</p>  // or show nothing or loading
+                           ) : (
+                                  <Card weather={weather} />
+)}
     </div>
   );
 }
